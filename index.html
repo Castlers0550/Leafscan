@@ -361,7 +361,7 @@
     const formData = new FormData();
     formData.append('image', selectedFile);
     try {
-      const res = await fetch('/predict', { method: 'POST', body: formData });
+       const res = await fetch('https://castlers0550-leafscan.hf.space/predict', { method: 'POST', body: formData });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       renderResults(data.predictions);

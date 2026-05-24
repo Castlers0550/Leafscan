@@ -249,8 +249,10 @@
         body: JSON.stringify({ data: [{ path: filePath }] })
       });
       const data = await res.json();
-      if (data.error) throw new Error(data.error);
-      renderMarkdown(data.data[0]);
+console.log('HF Response:', JSON.stringify(data));
+if (data.error) throw new Error(data.error);
+if (!data.data || !data.data[0]) throw new Error('Empty response from model');
+renderMarkdown(data.data[0]);
       setStatus('Analysis complete!', 'ok');
     } catch(e) {
       setStatus('Error: ' + e.message, 'err');

@@ -97,8 +97,7 @@
   footer { text-align: center; padding: 2.5rem; border-top: 1px solid var(--border2); font-size: 0.8rem; color: var(--text3); }
   footer span { color: var(--green); }
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
-@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
@@ -232,27 +231,24 @@
     resultsWrap.classList.remove('show');
 
     try {
-      // Step 1: Upload file to HF
-      const uploadForm = new FormData();
-      uploadForm.append('files', selectedFile);
-      const uploadRes = await fetch(`${HF_API}/upload`, {
-        method: 'POST',
-        body: uploadForm
+      const base64 = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.readAsDataURL(selectedFile);
       });
-      const uploadData = await uploadRes.json();
-      const filePath = uploadData[0];
 
-      // Step 2: Run prediction
       const res = await fetch(`${HF_API}/run/predict`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: [{ path: filePath }] })
+        body: JSON.stringify({
+          data: [`data:${selectedFile.type};base64,${base64}`]
+        })
       });
       const data = await res.json();
-console.log('HF Response:', JSON.stringify(data));
-if (data.error) throw new Error(data.error);
-if (!data.data || !data.data[0]) throw new Error('Empty response from model');
-renderMarkdown(data.data[0]);
+      console.log('HF Response:', JSON.stringify(data).substring(0, 300));
+      if (data.error) throw new Error(data.error);
+      if (!data.data || !data.data[0]) throw new Error('Empty response from model');
+      renderMarkdown(data.data[0]);
       setStatus('Analysis complete!', 'ok');
     } catch(e) {
       setStatus('Error: ' + e.message, 'err');
@@ -264,43 +260,17 @@ renderMarkdown(data.data[0]);
 
   function renderMarkdown(text) {
     predList.innerHTML = '';
-    function renderMarkdown(text) {
-  predList.innerHTML = '';
-  if (!text) { setStatus('No results returned', 'err'); return; }
-  const blocks = text.trim().split('\n\n').filter(b => b.trim() !== '');
-  if (!blocks || blocks.length === 0) { setStatus('Could not parse results', 'err'); return; }
-  blocks.forEach((block, i) => {
-    const lines = block.split('\n');
-    const titleLine = (lines[0] || '').replace(/\*\*/g, '').replace(/^#\d+ — /, '');
-    const statusLine = lines[1] || '';
-    const confLine = lines[2] || '';
-    const pct = confLine.replace('Confidence: ', '').replace('%', '').trim();
-    const healthy = statusLine.includes('Healthy');
-    const diseaseName = statusLine.replace('✅ Healthy: ', '').replace('⚠️ Disease detected: ', '');
-
-    const card = document.createElement('div');
-    card.className = 'pred-card' + (i === 0 ? ' top' : '');
-    card.style.animationDelay = (i * 0.1) + 's';
-    card.innerHTML = `
-      <div class="pred-rank">${i + 1}</div>
-      <div>
-        <div class="pred-plant">${titleLine}</div>
-        <div class="pred-name">${diseaseName}${healthy ? '<span class="healthy-badge">Healthy</span>' : ''}</div>
-      </div>
-      <div class="pred-pct">${pct}%</div>
-      <div class="pred-bar-row"><div class="pred-bar-bg"><div class="pred-bar-fill" id="bar${i}"></div></div></div>`;
-    predList.appendChild(card);
-    setTimeout(() => { document.getElementById('bar' + i).style.width = pct + '%'; }, 100 + i * 80);
-  });
-  resultsWrap.classList.add('show');
-
-      const titleLine = lines[0].replace(/\*\*/g, '').replace(/^#\d+ — /, '');
+    if (!text) { setStatus('No results returned', 'err'); return; }
+    const blocks = text.trim().split('\n\n').filter(b => b.trim() !== '');
+    if (!blocks || blocks.length === 0) { setStatus('Could not parse results', 'err'); return; }
+    blocks.forEach((block, i) => {
+      const lines = block.split('\n');
+      const titleLine = (lines[0] || '').replace(/\*\*/g, '').replace(/^#\d+ — /, '');
       const statusLine = lines[1] || '';
       const confLine = lines[2] || '';
       const pct = confLine.replace('Confidence: ', '').replace('%', '').trim();
       const healthy = statusLine.includes('Healthy');
       const diseaseName = statusLine.replace('✅ Healthy: ', '').replace('⚠️ Disease detected: ', '');
-
       const card = document.createElement('div');
       card.className = 'pred-card' + (i === 0 ? ' top' : '');
       card.style.animationDelay = (i * 0.1) + 's';
@@ -314,7 +284,7 @@ renderMarkdown(data.data[0]);
         <div class="pred-bar-row"><div class="pred-bar-bg"><div class="pred-bar-fill" id="bar${i}"></div></div></div>`;
       predList.appendChild(card);
       setTimeout(() => { document.getElementById('bar' + i).style.width = pct + '%'; }, 100 + i * 80);
-    };
+    });
     resultsWrap.classList.add('show');
   }
 

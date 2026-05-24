@@ -8,142 +8,57 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #080c08;
-    --bg2: #0e140e;
-    --surface: #1a221a;
-    --surface2: #202a20;
-    --green: #39ff6a;
-    --green-dim: #1a8c3a;
-    --green-glow: rgba(57,255,106,0.15);
-    --green-glow2: rgba(57,255,106,0.06);
-    --text: #e8f0e8;
-    --text2: #8a9e8a;
-    --text3: #4a5e4a;
-    --border: rgba(57,255,106,0.15);
-    --border2: rgba(255,255,255,0.06);
-    --red: #ff4f4f;
+    --bg: #080c08; --bg2: #0e140e; --surface: #1a221a; --surface2: #202a20;
+    --green: #39ff6a; --green-dim: #1a8c3a; --green-glow: rgba(57,255,106,0.15);
+    --green-glow2: rgba(57,255,106,0.06); --text: #e8f0e8; --text2: #8a9e8a;
+    --text3: #4a5e4a; --border: rgba(57,255,106,0.15); --border2: rgba(255,255,255,0.06); --red: #ff4f4f;
   }
   html { scroll-behavior: smooth; }
   body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 4px; }
-
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.2rem 3rem;
-    background: rgba(8,12,8,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border2);
-  }
-  .nav-logo {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.1rem; font-weight: 700; color: var(--green);
-    display: flex; align-items: center; gap: 8px; text-decoration: none;
-  }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 3rem; background: rgba(8,12,8,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border2); }
+  .nav-logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--green); display: flex; align-items: center; gap: 8px; text-decoration: none; }
   .logo-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
   .nav-links { display: flex; gap: 2rem; list-style: none; }
   .nav-links a { font-size: 0.85rem; color: var(--text2); text-decoration: none; transition: color 0.2s; }
   .nav-links a:hover { color: var(--green); }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    text-align: center; padding: 8rem 2rem 5rem; position: relative; overflow: hidden;
-  }
-  .hero-grid {
-    position: absolute; inset: 0;
-    background-image: linear-gradient(rgba(57,255,106,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(57,255,106,0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
-  }
-  .hero-orb {
-    position: absolute; width: 700px; height: 700px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(57,255,106,0.07) 0%, transparent 70%);
-    top: 50%; left: 50%; transform: translate(-50%,-50%);
-    animation: orb 5s ease-in-out infinite;
-  }
+  .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 8rem 2rem 5rem; position: relative; overflow: hidden; }
+  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(57,255,106,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(57,255,106,0.04) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%); }
+  .hero-orb { position: absolute; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(57,255,106,0.07) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); animation: orb 5s ease-in-out infinite; }
   @keyframes orb { 0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.6} 50%{transform:translate(-50%,-50%) scale(1.15);opacity:1} }
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--green-glow2); border: 1px solid var(--border);
-    border-radius: 99px; padding: 6px 16px;
-    font-size: 0.72rem; color: var(--green); letter-spacing: 0.08em; text-transform: uppercase;
-    margin-bottom: 2rem; position: relative; animation: fadeup 0.8s ease both;
-  }
+  .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--green-glow2); border: 1px solid var(--border); border-radius: 99px; padding: 6px 16px; font-size: 0.72rem; color: var(--green); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2rem; position: relative; animation: fadeup 0.8s ease both; }
   .badge-dot { width: 5px; height: 5px; background: var(--green); border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
-  .hero h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 700;
-    line-height: 1.05; letter-spacing: -2px;
-    margin-bottom: 1.5rem; position: relative; animation: fadeup 0.8s 0.1s ease both;
-  }
+  .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 700; line-height: 1.05; letter-spacing: -2px; margin-bottom: 1.5rem; position: relative; animation: fadeup 0.8s 0.1s ease both; }
   .hero h1 span { color: var(--green); }
-  .hero > p {
-    font-size: 1.05rem; color: var(--text2); max-width: 500px; line-height: 1.8;
-    margin-bottom: 2.5rem; position: relative; animation: fadeup 0.8s 0.2s ease both;
-  }
+  .hero > p { font-size: 1.05rem; color: var(--text2); max-width: 500px; line-height: 1.8; margin-bottom: 2.5rem; position: relative; animation: fadeup 0.8s 0.2s ease both; }
   .hero-btns { display: flex; gap: 1rem; justify-content: center; animation: fadeup 0.8s 0.3s ease both; position: relative; }
   @keyframes fadeup { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-
-  .btn {
-    font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 500;
-    padding: 0.75rem 1.75rem; border-radius: 8px; cursor: pointer;
-    transition: all 0.2s; text-decoration: none;
-    display: inline-flex; align-items: center; gap: 8px; border: none;
-  }
+  .btn { font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 500; padding: 0.75rem 1.75rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; border: none; }
   .btn-green { background: var(--green); color: #080c08; }
   .btn-green:hover { transform: translateY(-2px); filter: brightness(1.1); }
   .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border2); }
   .btn-outline:hover { border-color: var(--border); color: var(--green); transform: translateY(-2px); }
   .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; filter: none !important; }
-
-  /* STATS */
-  .stats {
-    display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
-    padding: 2rem; border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2);
-    background: var(--bg2);
-  }
+  .stats { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; padding: 2rem; border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); background: var(--bg2); }
   .stat { text-align: center; }
   .stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--green); }
   .stat-label { font-size: 0.75rem; color: var(--text3); margin-top: 2px; letter-spacing: 0.05em; text-transform: uppercase; }
-
-  /* SECTIONS */
   .section { padding: 6rem 2rem; max-width: 1000px; margin: 0 auto; }
   .section-label { font-size: 0.72rem; color: var(--green); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
   .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; letter-spacing: -1px; margin-bottom: 1rem; }
   .section-sub { font-size: 0.95rem; color: var(--text2); line-height: 1.7; max-width: 480px; }
-
-  /* STEPS */
   .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
-  .step-card {
-    background: var(--surface); border: 1px solid var(--border2);
-    border-radius: 16px; padding: 1.75rem;
-    transition: border-color 0.3s, transform 0.3s; position: relative; overflow: hidden;
-  }
+  .step-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; padding: 1.75rem; transition: border-color 0.3s, transform 0.3s; }
   .step-card:hover { border-color: var(--border); transform: translateY(-4px); }
-  .step-num {
-    width: 36px; height: 36px; border-radius: 8px;
-    background: var(--green-glow); border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--green);
-    margin-bottom: 1rem;
-  }
+  .step-num { width: 36px; height: 36px; border-radius: 8px; background: var(--green-glow); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--green); margin-bottom: 1rem; }
   .step-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
   .step-card p { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
-
-  /* DETECTOR */
   #detector { background: var(--bg2); border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); }
   #detector .section { max-width: 760px; }
-  .drop-zone {
-    border: 1.5px dashed var(--border); border-radius: 16px; padding: 3.5rem 2rem;
-    text-align: center; cursor: pointer; transition: all 0.2s; margin-top: 2.5rem;
-    background: var(--surface); position: relative; overflow: hidden;
-  }
+  .drop-zone { border: 1.5px dashed var(--border); border-radius: 16px; padding: 3.5rem 2rem; text-align: center; cursor: pointer; transition: all 0.2s; margin-top: 2.5rem; background: var(--surface); position: relative; overflow: hidden; }
   .drop-zone:hover, .drop-zone.hovering { border-color: var(--green); background: var(--surface2); }
   .drop-zone.has-image { padding: 1rem; border-style: solid; }
   .drop-zone input { display: none; }
@@ -157,75 +72,48 @@
   #status-msg { text-align: center; font-size: 0.82rem; color: var(--text3); margin-top: 0.75rem; min-height: 1rem; }
   #status-msg.err { color: var(--red); }
   #status-msg.ok { color: var(--green); }
-
-  /* RESULTS */
   #results-wrap { display: none; margin-top: 2rem; }
   #results-wrap.show { display: block; }
   .results-title { font-size: 0.72rem; color: var(--text2); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.08em; }
-  .pred-card {
-    background: var(--surface); border: 1px solid var(--border2);
-    border-radius: 12px; padding: 1rem 1.25rem;
-    display: grid; grid-template-columns: 36px 1fr auto;
-    gap: 0.6rem 1rem; align-items: center; margin-bottom: 0.75rem;
-    animation: fadeup 0.4s ease both; transition: border-color 0.2s;
-  }
+  .pred-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 1rem 1.25rem; display: grid; grid-template-columns: 36px 1fr auto; gap: 0.6rem 1rem; align-items: center; margin-bottom: 0.75rem; animation: fadeup 0.4s ease both; transition: border-color 0.2s; }
   .pred-card.top { border-color: var(--border); background: var(--surface2); }
-  .pred-rank {
-    width: 36px; height: 36px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 700;
-    background: var(--surface2); color: var(--text3); border: 1px solid var(--border2);
-  }
+  .pred-rank { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 700; background: var(--surface2); color: var(--text3); border: 1px solid var(--border2); }
   .top .pred-rank { background: var(--green-glow); color: var(--green); border-color: var(--border); }
   .pred-plant { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
   .pred-name { font-size: 0.95rem; font-weight: 500; }
-  .healthy-badge {
-    display: inline-block; background: var(--green-glow); color: var(--green);
-    font-size: 0.65rem; font-weight: 600; padding: 2px 8px;
-    border-radius: 99px; margin-left: 8px; vertical-align: 2px; border: 1px solid var(--border);
-  }
+  .healthy-badge { display: inline-block; background: var(--green-glow); color: var(--green); font-size: 0.65rem; font-weight: 600; padding: 2px 8px; border-radius: 99px; margin-left: 8px; vertical-align: 2px; border: 1px solid var(--border); }
   .pred-pct { font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--green); }
   .pred-bar-row { grid-column: 1 / -1; margin-top: -4px; }
   .pred-bar-bg { background: var(--surface2); border-radius: 99px; height: 4px; overflow: hidden; }
   .pred-bar-fill { height: 100%; background: var(--green); border-radius: 99px; width: 0%; transition: width 0.7s cubic-bezier(0.25,1,0.5,1); }
-
   .spinner { display: inline-block; width: 13px; height: 13px; border: 2px solid rgba(8,12,8,0.3); border-top-color: #080c08; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: -2px; margin-right: 6px; }
   @keyframes spin { to{transform:rotate(360deg)} }
-
-  /* FEATURES */
   .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 3rem; }
-  .feat-card {
-    background: var(--surface); border: 1px solid var(--border2);
-    border-radius: 14px; padding: 1.5rem; transition: border-color 0.3s, transform 0.3s;
-  }
+  .feat-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 14px; padding: 1.5rem; transition: border-color 0.3s, transform 0.3s; }
   .feat-card:hover { border-color: var(--border); transform: translateY(-3px); }
   .feat-icon { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; }
   .feat-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
   .feat-card p { font-size: 0.82rem; color: var(--text2); line-height: 1.6; }
-
   footer { text-align: center; padding: 2.5rem; border-top: 1px solid var(--border2); font-size: 0.8rem; color: var(--text3); }
   footer span { color: var(--green); }
-
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
-
 <nav>
   <a class="nav-logo" href="#"><div class="logo-dot"></div> LeafScan AI</a>
-  <span style="font-size:0.78rem; color: var(--text3); letter-spacing:0.03em;">by <span style="color:var(--green);">Eben Siyabalapitiya</span></span>
+  <span style="font-size:0.78rem; color:var(--text3);">by <span style="color:var(--green);">Eben Siyabalapitiya</span></span>
   <ul class="nav-links">
     <li><a href="#how">How it works</a></li>
     <li><a href="#detector">Try it</a></li>
     <li><a href="#features">Features</a></li>
   </ul>
 </nav>
-
 <section class="hero">
   <div class="hero-grid"></div>
   <div class="hero-orb"></div>
-  <div class="hero-badge"><div class="badge-dot"></div> AI Powered Plant Health</div>
+  <div class="hero-badge"><div class="badge-dot"></div> AI-Powered Plant Health</div>
   <h1>Detect Plant<br/><span>Diseases Instantly</span></h1>
   <p>Upload a photo of any plant leaf and our AI identifies diseases, infections, and deficiencies in seconds.</p>
   <div class="hero-btns">
@@ -233,14 +121,12 @@
     <a href="#how" class="btn btn-outline">How it works</a>
   </div>
 </section>
-
 <div class="stats reveal">
-  <div class="stat"><div class="stat-num">54K+</div><div class="stat-label">Training Images</div></div>
+  <div class="stat"><div class="stat-num">70K+</div><div class="stat-label">Training Images</div></div>
   <div class="stat"><div class="stat-num">38</div><div class="stat-label">Disease Classes</div></div>
   <div class="stat"><div class="stat-num">14</div><div class="stat-label">Plant Types</div></div>
-  <div class="stat"><div class="stat-num">95%+</div><div class="stat-label">Accuracy</div></div>
+  <div class="stat"><div class="stat-num">99.9%</div><div class="stat-label">Accuracy</div></div>
 </div>
-
 <section id="how" class="section">
   <div class="reveal">
     <div class="section-label">Process</div>
@@ -248,30 +134,17 @@
     <p class="section-sub">Three simple steps to identify what's wrong with your plant.</p>
   </div>
   <div class="steps">
-    <div class="step-card reveal">
-      <div class="step-num">01</div>
-      <h3>Upload a photo</h3>
-      <p>Take a clear photo of the affected leaf and drag it into the detector below.</p>
-    </div>
-    <div class="step-card reveal">
-      <div class="step-num">02</div>
-      <h3>AI analyzes it</h3>
-      <p>This MobileNetV2 model scans the leaf against 54,000+ disease patterns instantly.</p>
-    </div>
-    <div class="step-card reveal">
-      <div class="step-num">03</div>
-      <h3>Get results</h3>
-      <p>Receive the top 3 most likely diagnoses with confidence scores in under a second.</p>
-    </div>
+    <div class="step-card reveal"><div class="step-num">01</div><h3>Upload a photo</h3><p>Take a clear photo of the affected leaf and drag it into the detector below.</p></div>
+    <div class="step-card reveal"><div class="step-num">02</div><h3>AI analyzes it</h3><p>Our EfficientNetB0 model scans the leaf against 70,000+ disease patterns instantly.</p></div>
+    <div class="step-card reveal"><div class="step-num">03</div><h3>Get results</h3><p>Receive the top 3 most likely diagnoses with confidence scores in under a second.</p></div>
   </div>
 </section>
-
 <section id="detector">
   <div class="section">
     <div class="reveal">
       <div class="section-label">Tool</div>
       <div class="section-title">Analyze your leaf</div>
-      <p class="section-sub">Drag and drop a photo or click to browse. Works best with clear, well-lit leaf photos. Dont fumbe pls</p>
+      <p class="section-sub">Drag and drop a photo or click to browse. Works best with clear, well-lit leaf photos.</p>
     </div>
     <div class="drop-zone reveal" id="drop-zone" onclick="document.getElementById('file-input').click()">
       <input type="file" id="file-input" accept="image/*" />
@@ -293,7 +166,6 @@
     </div>
   </div>
 </section>
-
 <section id="features" class="section">
   <div class="reveal">
     <div class="section-label">Why LeafScan</div>
@@ -301,18 +173,17 @@
     <p class="section-sub">Everything you need to keep your plants healthy.</p>
   </div>
   <div class="features">
-    <div class="feat-card reveal"><span class="feat-icon">⚡</span><h3>Instant results</h3><p>Get a diagnosis in under a second using our optimized MobileNetV2 model.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">🎯</span><h3>High accuracy</h3><p>Trained on 54,000+ verified plant disease images from the PlantVillage dataset.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">⚡</span><h3>Instant results</h3><p>Get a diagnosis in under a second using our optimized EfficientNetB0 model.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🎯</span><h3>99.9% accuracy</h3><p>Trained on 70,000+ verified plant disease images.</p></div>
     <div class="feat-card reveal"><span class="feat-icon">🌱</span><h3>38 disease classes</h3><p>Covers tomatoes, apples, corn, grapes, potatoes and more.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">🔒</span><h3>Private & secure</h3><p>Your photos are never stored. Everything is processed in real time and discarded.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🔒</span><h3>Private & secure</h3><p>Your photos are never stored. Everything is processed in real time.</p></div>
     <div class="feat-card reveal"><span class="feat-icon">📱</span><h3>Works on any device</h3><p>Fully responsive — use it on your phone in the field or on desktop.</p></div>
     <div class="feat-card reveal"><span class="feat-icon">🆓</span><h3>Completely free</h3><p>No account needed. No limits. Just upload and get your answer.</p></div>
   </div>
 </section>
-
-<footer>Built with <span>TensorFlow</span> &amp; Flask — LeafScan AI &copy; 2026</footer>
-
+<footer>Built with <span>TensorFlow</span> & EfficientNetB0 — LeafScan AI © 2026 — by <span>Eben Siyabalapitiya</span></footer>
 <script>
+  const HF_API = "https://castlers0550-leafscan.hf.space";
   const dropZone    = document.getElementById('drop-zone');
   const fileInput   = document.getElementById('file-input');
   const preview     = document.getElementById('preview');
@@ -358,13 +229,27 @@
     analyzeBtn.innerHTML = '<span class="spinner"></span>Analyzing…';
     setStatus('Sending to AI model…', '');
     resultsWrap.classList.remove('show');
-    const formData = new FormData();
-    formData.append('image', selectedFile);
+
     try {
-       const res = await fetch('https://castlers0550-leafscan.hf.space/predict', { method: 'POST', body: formData });
+      // Step 1: Upload file to HF
+      const uploadForm = new FormData();
+      uploadForm.append('files', selectedFile);
+      const uploadRes = await fetch(`${HF_API}/upload`, {
+        method: 'POST',
+        body: uploadForm
+      });
+      const uploadData = await uploadRes.json();
+      const filePath = uploadData[0];
+
+      // Step 2: Run prediction
+      const res = await fetch(`${HF_API}/run/predict`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: [{ path: filePath }] })
+      });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
-      renderResults(data.predictions);
+      renderMarkdown(data.data[0]);
       setStatus('Analysis complete!', 'ok');
     } catch(e) {
       setStatus('Error: ' + e.message, 'err');
@@ -374,18 +259,53 @@
     }
   }
 
-  function renderResults(preds) {
+  function renderMarkdown(text) {
     predList.innerHTML = '';
-    preds.forEach((p, i) => {
-      const pct = (p.confidence * 100).toFixed(1);
+    function renderMarkdown(text) {
+  predList.innerHTML = '';
+  if (!text) { setStatus('No results returned', 'err'); return; }
+  const blocks = text.trim().split('\n\n').filter(b => b.trim() !== '');
+  if (!blocks || blocks.length === 0) { setStatus('Could not parse results', 'err'); return; }
+  blocks.forEach((block, i) => {
+    const lines = block.split('\n');
+    const titleLine = (lines[0] || '').replace(/\*\*/g, '').replace(/^#\d+ — /, '');
+    const statusLine = lines[1] || '';
+    const confLine = lines[2] || '';
+    const pct = confLine.replace('Confidence: ', '').replace('%', '').trim();
+    const healthy = statusLine.includes('Healthy');
+    const diseaseName = statusLine.replace('✅ Healthy: ', '').replace('⚠️ Disease detected: ', '');
+
+    const card = document.createElement('div');
+    card.className = 'pred-card' + (i === 0 ? ' top' : '');
+    card.style.animationDelay = (i * 0.1) + 's';
+    card.innerHTML = `
+      <div class="pred-rank">${i + 1}</div>
+      <div>
+        <div class="pred-plant">${titleLine}</div>
+        <div class="pred-name">${diseaseName}${healthy ? '<span class="healthy-badge">Healthy</span>' : ''}</div>
+      </div>
+      <div class="pred-pct">${pct}%</div>
+      <div class="pred-bar-row"><div class="pred-bar-bg"><div class="pred-bar-fill" id="bar${i}"></div></div></div>`;
+    predList.appendChild(card);
+    setTimeout(() => { document.getElementById('bar' + i).style.width = pct + '%'; }, 100 + i * 80);
+  });
+  resultsWrap.classList.add('show');
+
+      const titleLine = lines[0].replace(/\*\*/g, '').replace(/^#\d+ — /, '');
+      const statusLine = lines[1] || '';
+      const confLine = lines[2] || '';
+      const pct = confLine.replace('Confidence: ', '').replace('%', '').trim();
+      const healthy = statusLine.includes('Healthy');
+      const diseaseName = statusLine.replace('✅ Healthy: ', '').replace('⚠️ Disease detected: ', '');
+
       const card = document.createElement('div');
       card.className = 'pred-card' + (i === 0 ? ' top' : '');
       card.style.animationDelay = (i * 0.1) + 's';
       card.innerHTML = `
         <div class="pred-rank">${i + 1}</div>
         <div>
-          <div class="pred-plant">${p.plant}</div>
-          <div class="pred-name">${p.disease}${p.healthy ? '<span class="healthy-badge">Healthy</span>' : ''}</div>
+          <div class="pred-plant">${titleLine}</div>
+          <div class="pred-name">${diseaseName}${healthy ? '<span class="healthy-badge">Healthy</span>' : ''}</div>
         </div>
         <div class="pred-pct">${pct}%</div>
         <div class="pred-bar-row"><div class="pred-bar-bg"><div class="pred-bar-fill" id="bar${i}"></div></div></div>`;

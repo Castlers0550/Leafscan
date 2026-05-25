@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>LeafScan AI — Plant Disease Detector</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+<<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -14,7 +14,7 @@
   --text3: #3d5a3d; --border: rgba(61,255,114,0.13); --border2: rgba(255,255,255,0.055); --red: #ff4f4f;
 }
 html { scroll-behavior: smooth; }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; cursor: none; }
+body { font-family: 'Space Mono', monospace; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; cursor: none; }
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 4px; }
@@ -31,7 +31,7 @@ body:hover #cursor { opacity: 1; }
 /* NAV */
 nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 3rem; background: transparent; backdrop-filter: blur(16px); border-bottom: 1px solid transparent; transition: background 0.4s, border-color 0.4s; }
 nav.scrolled { background: rgba(6,10,6,0.88); border-color: var(--border2); }
-.nav-logo { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--green); display: flex; align-items: center; gap: 8px; text-decoration: none; letter-spacing: 0.02em; }
+.nav-logo { font-family: 'Space Mono', monospace; font-size: 1rem; font-weight: 700; color: var(--green); display: flex; align-items: center; gap: 8px; text-decoration: none; letter-spacing: 0.02em; }
 .logo-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse 2.2s ease-in-out infinite; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.6)} }
 .nav-links { display: flex; gap: 2.2rem; list-style: none; }

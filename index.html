@@ -18,15 +18,20 @@
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 4px; }
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 3rem; background: rgba(8,12,8,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border2); }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 3rem; background: rgba(8,12,8,0); backdrop-filter: blur(12px); border-bottom: 1px solid transparent; transition: background 0.3s, border-color 0.3s; }
+  nav.scrolled { background: rgba(8,12,8,0.92); border-color: var(--border2); }
   .nav-logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--green); display: flex; align-items: center; gap: 8px; text-decoration: none; }
   .logo-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
   .nav-links { display: flex; gap: 2rem; list-style: none; }
   .nav-links a { font-size: 0.85rem; color: var(--text2); text-decoration: none; transition: color 0.2s; }
   .nav-links a:hover { color: var(--green); }
+
+  /* HERO */
   .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 8rem 2rem 5rem; position: relative; overflow: hidden; }
-  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(57,255,106,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(57,255,106,0.04) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%); }
+  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(57,255,106,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(57,255,106,0.04) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%); transform: translateY(0); transition: transform 0.1s linear; }
   .hero-orb { position: absolute; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(57,255,106,0.07) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); animation: orb 5s ease-in-out infinite; }
   @keyframes orb { 0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.6} 50%{transform:translate(-50%,-50%) scale(1.15);opacity:1} }
   .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--green-glow2); border: 1px solid var(--border); border-radius: 99px; padding: 6px 16px; font-size: 0.72rem; color: var(--green); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2rem; position: relative; animation: fadeup 0.8s ease both; }
@@ -36,30 +41,62 @@
   .hero > p { font-size: 1.05rem; color: var(--text2); max-width: 500px; line-height: 1.8; margin-bottom: 2.5rem; position: relative; animation: fadeup 0.8s 0.2s ease both; }
   .hero-btns { display: flex; gap: 1rem; justify-content: center; animation: fadeup 0.8s 0.3s ease both; position: relative; }
   @keyframes fadeup { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  /* CREDIT BADGE */
+  .credit-badge { position: absolute; bottom: 2rem; right: 2rem; display: flex; align-items: center; gap: 8px; background: rgba(8,12,8,0.7); border: 1px solid var(--border2); border-radius: 99px; padding: 6px 14px; font-size: 0.72rem; color: var(--text3); backdrop-filter: blur(8px); animation: fadeup 1s 0.5s ease both; }
+  .credit-badge span { color: var(--green); font-weight: 500; }
+
+  /* BUTTONS */
   .btn { font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 500; padding: 0.75rem 1.75rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; border: none; }
   .btn-green { background: var(--green); color: #080c08; }
-  .btn-green:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  .btn-green:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 0 20px rgba(57,255,106,0.3); }
   .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border2); }
   .btn-outline:hover { border-color: var(--border); color: var(--green); transform: translateY(-2px); }
-  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; filter: none !important; }
-  .stats { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; padding: 2rem; border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); background: var(--bg2); }
-  .stat { text-align: center; }
-  .stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--green); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; filter: none !important; box-shadow: none !important; }
+
+  /* STATS */
+  .stats { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; padding: 2.5rem; border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); background: var(--bg2); }
+  .stat { text-align: center; cursor: default; }
+  .stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; color: var(--green); transition: transform 0.2s; }
+  .stat:hover .stat-num { transform: scale(1.1); }
   .stat-label { font-size: 0.75rem; color: var(--text3); margin-top: 2px; letter-spacing: 0.05em; text-transform: uppercase; }
+
+  /* SECTIONS */
   .section { padding: 6rem 2rem; max-width: 1000px; margin: 0 auto; }
   .section-label { font-size: 0.72rem; color: var(--green); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
   .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; letter-spacing: -1px; margin-bottom: 1rem; }
   .section-sub { font-size: 0.95rem; color: var(--text2); line-height: 1.7; max-width: 480px; }
+
+  /* STEPS */
   .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
-  .step-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; padding: 1.75rem; transition: border-color 0.3s, transform 0.3s; }
-  .step-card:hover { border-color: var(--border); transform: translateY(-4px); }
+  .step-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; padding: 1.75rem; transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s; }
+  .step-card:hover { border-color: var(--border); transform: translateY(-6px); box-shadow: 0 12px 40px rgba(57,255,106,0.08); }
   .step-num { width: 36px; height: 36px; border-radius: 8px; background: var(--green-glow); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--green); margin-bottom: 1rem; }
   .step-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
   .step-card p { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
-  #detector { background: var(--bg2); border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); }
+
+  /* DISEASE INFO */
+  #diseases { background: var(--bg2); border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); }
+  .disease-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 2.5rem; }
+  .disease-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 1rem 1.25rem; cursor: pointer; transition: all 0.25s; position: relative; overflow: hidden; }
+  .disease-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at top left, var(--green-glow2), transparent 60%); opacity: 0; transition: opacity 0.3s; }
+  .disease-card:hover { border-color: var(--border); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(57,255,106,0.07); }
+  .disease-card:hover::before { opacity: 1; }
+  .disease-card.active { border-color: var(--green); background: var(--surface2); }
+  .disease-plant { font-size: 0.68rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .disease-name { font-size: 0.88rem; font-weight: 500; color: var(--text); }
+  .disease-detail { display: none; margin-top: 2rem; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; animation: fadeup 0.3s ease; }
+  .disease-detail.show { display: block; }
+  .disease-detail h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--green); }
+  .disease-detail p { font-size: 0.88rem; color: var(--text2); line-height: 1.7; }
+  .disease-detail .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+  .tag { background: var(--green-glow2); border: 1px solid var(--border); border-radius: 99px; padding: 3px 10px; font-size: 0.7rem; color: var(--green); }
+
+  /* DETECTOR */
+  #detector { border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); }
   #detector .section { max-width: 760px; }
   .drop-zone { border: 1.5px dashed var(--border); border-radius: 16px; padding: 3.5rem 2rem; text-align: center; cursor: pointer; transition: all 0.2s; margin-top: 2.5rem; background: var(--surface); position: relative; overflow: hidden; }
-  .drop-zone:hover, .drop-zone.hovering { border-color: var(--green); background: var(--surface2); }
+  .drop-zone:hover, .drop-zone.hovering { border-color: var(--green); background: var(--surface2); box-shadow: 0 0 30px rgba(57,255,106,0.06); }
   .drop-zone.has-image { padding: 1rem; border-style: solid; }
   .drop-zone input { display: none; }
   .drop-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
@@ -88,30 +125,45 @@
   .pred-bar-fill { height: 100%; background: var(--green); border-radius: 99px; width: 0%; transition: width 0.7s cubic-bezier(0.25,1,0.5,1); }
   .spinner { display: inline-block; width: 13px; height: 13px; border: 2px solid rgba(8,12,8,0.3); border-top-color: #080c08; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: -2px; margin-right: 6px; }
   @keyframes spin { to{transform:rotate(360deg)} }
+
+  /* FEATURES */
   .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 3rem; }
-  .feat-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 14px; padding: 1.5rem; transition: border-color 0.3s, transform 0.3s; }
-  .feat-card:hover { border-color: var(--border); transform: translateY(-3px); }
-  .feat-icon { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; }
+  .feat-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 14px; padding: 1.5rem; transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s; }
+  .feat-card:hover { border-color: var(--border); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(57,255,106,0.07); }
+  .feat-label { display: inline-block; width: 28px; height: 28px; border-radius: 6px; background: var(--green-glow); border: 1px solid var(--border); margin-bottom: 0.75rem; }
   .feat-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
   .feat-card p { font-size: 0.82rem; color: var(--text2); line-height: 1.6; }
-  footer { text-align: center; padding: 2.5rem; border-top: 1px solid var(--border2); font-size: 0.8rem; color: var(--text3); }
+
+  /* FOOTER */
+  footer { text-align: center; padding: 2.5rem; border-top: 1px solid var(--border2); font-size: 0.8rem; color: var(--text3); line-height: 2; }
   footer span { color: var(--green); }
-  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .footer-links { display: flex; justify-content: center; gap: 2rem; margin-top: 0.75rem; }
+  .footer-links a { font-size: 0.78rem; color: var(--text3); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--green); }
+
+  /* SCROLL REVEAL */
+  .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left { opacity: 0; transform: translateX(-32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right { opacity: 0; transform: translateX(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
 </style>
 </head>
 <body>
-<nav>
+
+<nav id="navbar">
   <a class="nav-logo" href="#"><div class="logo-dot"></div> LeafScan AI</a>
-  <span style="font-size:0.78rem; color:var(--text3);">by <span style="color:var(--green);">Eben Siyabalapitiya</span></span>
   <ul class="nav-links">
     <li><a href="#how">How it works</a></li>
+    <li><a href="#diseases">Diseases</a></li>
     <li><a href="#detector">Try it</a></li>
     <li><a href="#features">Features</a></li>
   </ul>
 </nav>
+
 <section class="hero">
-  <div class="hero-grid"></div>
+  <div class="hero-grid" id="hero-grid"></div>
   <div class="hero-orb"></div>
   <div class="hero-badge"><div class="badge-dot"></div> AI-Powered Plant Health</div>
   <h1>Detect Plant<br/><span>Diseases Instantly</span></h1>
@@ -120,28 +172,48 @@
     <a href="#detector" class="btn btn-green">Try it free ↓</a>
     <a href="#how" class="btn btn-outline">How it works</a>
   </div>
+  <div class="credit-badge">Built by <span>Eben Siyabalapitiya</span></div>
 </section>
+
 <div class="stats reveal">
-  <div class="stat"><div class="stat-num">70K+</div><div class="stat-label">Training Images</div></div>
-  <div class="stat"><div class="stat-num">38</div><div class="stat-label">Disease Classes</div></div>
-  <div class="stat"><div class="stat-num">14</div><div class="stat-label">Plant Types</div></div>
-  <div class="stat"><div class="stat-num">99.9%</div><div class="stat-label">Accuracy</div></div>
+  <div class="stat"><div class="stat-num" data-target="70000" data-suffix="K+">0</div><div class="stat-label">Training Images</div></div>
+  <div class="stat"><div class="stat-num" data-target="38" data-suffix="">0</div><div class="stat-label">Disease Classes</div></div>
+  <div class="stat"><div class="stat-num" data-target="14" data-suffix="">0</div><div class="stat-label">Plant Types</div></div>
+  <div class="stat"><div class="stat-num" data-target="99.9" data-suffix="%" data-decimal="true">0</div><div class="stat-label">Accuracy</div></div>
 </div>
+
 <section id="how" class="section">
-  <div class="reveal">
+  <div class="reveal-left">
     <div class="section-label">Process</div>
     <div class="section-title">How it works</div>
     <p class="section-sub">Three simple steps to identify what's wrong with your plant.</p>
   </div>
   <div class="steps">
     <div class="step-card reveal"><div class="step-num">01</div><h3>Upload a photo</h3><p>Take a clear photo of the affected leaf and drag it into the detector below.</p></div>
-    <div class="step-card reveal"><div class="step-num">02</div><h3>AI analyzes it</h3><p>Our EfficientNetB0 model scans the leaf against 70,000+ disease patterns instantly.</p></div>
-    <div class="step-card reveal"><div class="step-num">03</div><h3>Get results</h3><p>Receive the top 3 most likely diagnoses with confidence scores in under a second.</p></div>
+    <div class="step-card reveal" style="transition-delay:0.1s"><div class="step-num">02</div><h3>AI analyzes it</h3><p>Our EfficientNetB0 model scans the leaf against 70,000+ disease patterns instantly.</p></div>
+    <div class="step-card reveal" style="transition-delay:0.2s"><div class="step-num">03</div><h3>Get results</h3><p>Receive the top 3 most likely diagnoses with confidence scores in under a second.</p></div>
   </div>
 </section>
+
+<section id="diseases">
+  <div class="section">
+    <div class="reveal-left">
+      <div class="section-label">Knowledge Base</div>
+      <div class="section-title">Supported diseases</div>
+      <p class="section-sub">Click any disease to learn more about symptoms and what to do.</p>
+    </div>
+    <div class="disease-grid reveal" id="disease-grid"></div>
+    <div class="disease-detail" id="disease-detail">
+      <h3 id="detail-title"></h3>
+      <p id="detail-desc"></p>
+      <div class="tags" id="detail-tags"></div>
+    </div>
+  </div>
+</section>
+
 <section id="detector">
   <div class="section">
-    <div class="reveal">
+    <div class="reveal-left">
       <div class="section-label">Tool</div>
       <div class="section-title">Analyze your leaf</div>
       <p class="section-sub">Drag and drop a photo or click to browse. Works best with clear, well-lit leaf photos.</p>
@@ -166,23 +238,129 @@
     </div>
   </div>
 </section>
+
 <section id="features" class="section">
-  <div class="reveal">
+  <div class="reveal-right">
     <div class="section-label">Why LeafScan</div>
     <div class="section-title">Built for accuracy</div>
     <p class="section-sub">Everything you need to keep your plants healthy.</p>
   </div>
   <div class="features">
-    <div class="feat-card reveal"><span class="feat-icon">⚡</span><h3>Instant results</h3><p>Get a diagnosis in under a second using our optimized EfficientNetB0 model.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">🎯</span><h3>99.9% accuracy</h3><p>Trained on 70,000+ verified plant disease images.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">🌱</span><h3>38 disease classes</h3><p>Covers tomatoes, apples, corn, grapes, potatoes and more.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">🔒</span><h3>Private & secure</h3><p>Your photos are never stored. Everything is processed in real time.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">📱</span><h3>Works on any device</h3><p>Fully responsive — use it on your phone in the field or on desktop.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">🆓</span><h3>Completely free</h3><p>No account needed. No limits. Just upload and get your answer.</p></div>
+    <div class="feat-card reveal"><div class="feat-label"></div><h3>Instant results</h3><p>Get a diagnosis in under a second using our optimized EfficientNetB0 model.</p></div>
+    <div class="feat-card reveal" style="transition-delay:0.05s"><div class="feat-label"></div><h3>99.9% accuracy</h3><p>Trained on 70,000+ verified plant disease images from the PlantVillage dataset.</p></div>
+    <div class="feat-card reveal" style="transition-delay:0.1s"><div class="feat-label"></div><h3>38 disease classes</h3><p>Covers tomatoes, apples, corn, grapes, potatoes and more.</p></div>
+    <div class="feat-card reveal" style="transition-delay:0.15s"><div class="feat-label"></div><h3>Private & secure</h3><p>Your photos are never stored. Everything is processed in real time and discarded.</p></div>
+    <div class="feat-card reveal" style="transition-delay:0.2s"><div class="feat-label"></div><h3>Works on any device</h3><p>Fully responsive — use it on your phone in the field or on desktop.</p></div>
+    <div class="feat-card reveal" style="transition-delay:0.25s"><div class="feat-label"></div><h3>Completely free</h3><p>No account needed. No limits. Just upload and get your answer.</p></div>
   </div>
 </section>
-<footer>Built with <span>TensorFlow</span> & EfficientNetB0 — LeafScan AI © 2026 — by <span>Eben Siyabalapitiya</span></footer>
+
+<footer>
+  <div>LeafScan AI — Plant Disease Detection © 2026</div>
+  <div>Built with <span>TensorFlow</span> & EfficientNetB0 — Trained on 70,000+ images</div>
+  <div class="footer-links">
+    <a href="#how">How it works</a>
+    <a href="#diseases">Diseases</a>
+    <a href="#detector">Try it</a>
+    <a href="https://github.com/Castlers0550/Leafscan" target="_blank">GitHub</a>
+  </div>
+  <div style="margin-top:0.75rem; font-size:0.72rem;">Designed & developed by <span>Eben Siyabalapitiya</span></div>
+</footer>
+
 <script>
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  const heroGrid = document.getElementById('hero-grid');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    heroGrid.style.transform = `translateY(${y * 0.3}px)`;
+  }, { passive: true });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+
+  function animateCounter(el) {
+    const target = parseFloat(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    const isDecimal = el.dataset.decimal === 'true';
+    const duration = 1800;
+    const start = performance.now();
+    function step(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const val = target * eased;
+      if (target >= 1000) {
+        el.textContent = Math.floor(val / 1000) + suffix;
+      } else if (isDecimal) {
+        el.textContent = val.toFixed(1) + suffix;
+      } else {
+        el.textContent = Math.floor(val) + suffix;
+      }
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  const statsObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('[data-target]').forEach(animateCounter);
+        statsObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  statsObserver.observe(document.querySelector('.stats'));
+
+  const diseases = [
+    { plant: 'Apple', name: 'Apple Scab', desc: 'A fungal disease causing dark, scabby lesions on leaves and fruit. Thrives in cool, wet conditions. Manage with fungicides and resistant varieties.', tags: ['Fungal', 'Spreads in rain', 'Treatable'] },
+    { plant: 'Apple', name: 'Black Rot', desc: 'Causes circular lesions on leaves and rotting fruit. Infected branches show cankers. Remove infected material and apply copper-based fungicides.', tags: ['Fungal', 'Canker', 'Fruit rot'] },
+    { plant: 'Apple', name: 'Cedar Apple Rust', desc: 'Requires both apple and juniper hosts to complete its life cycle. Causes bright orange spots on leaves. Remove nearby junipers if possible.', tags: ['Fungal', 'Two-host', 'Seasonal'] },
+    { plant: 'Tomato', name: 'Late Blight', desc: 'The same pathogen that caused the Irish potato famine. Spreads rapidly in wet conditions. Dark lesions with white mold on undersides of leaves.', tags: ['Oomycete', 'Fast spreading', 'High risk'] },
+    { plant: 'Tomato', name: 'Early Blight', desc: 'Causes dark, target-like spots with yellow halos on lower leaves. Fungal disease that spreads upward. Improve air circulation and avoid overhead watering.', tags: ['Fungal', 'Lower leaves first', 'Common'] },
+    { plant: 'Tomato', name: 'Yellow Leaf Curl', desc: 'Viral disease spread by whiteflies. Causes upward curling, yellowing of leaves, and stunted growth. Control whitefly populations to prevent spread.', tags: ['Viral', 'Whitefly spread', 'No cure'] },
+    { plant: 'Corn', name: 'Gray Leaf Spot', desc: 'Caused by a fungus, produces rectangular tan lesions parallel to leaf veins. Favored by warm, humid conditions with heavy dew. Use resistant hybrids.', tags: ['Fungal', 'Yield loss', 'Humid conditions'] },
+    { plant: 'Corn', name: 'Northern Leaf Blight', desc: 'Long, elliptical gray-green lesions on leaves. Can cause significant yield losses if severe. Fungicide applications and resistant varieties help.', tags: ['Fungal', 'Elliptical lesions', 'Yield loss'] },
+    { plant: 'Grape', name: 'Black Rot', desc: 'Causes brown lesions on leaves and mummified berries. Overwinters in infected plant debris. Remove mummified fruit and apply fungicides at bud break.', tags: ['Fungal', 'Fruit mummification', 'Overwinters'] },
+    { plant: 'Potato', name: 'Late Blight', desc: 'Extremely destructive disease causing water-soaked lesions that rapidly turn dark. Can destroy an entire crop in days under ideal conditions.', tags: ['Oomycete', 'Devastating', 'Cool & wet'] },
+    { plant: 'Strawberry', name: 'Leaf Scorch', desc: 'Purple spots with tan centers on leaves that eventually merge, causing leaf edges to appear scorched. Favored by warm, wet weather.', tags: ['Fungal', 'Purple spots', 'Warm weather'] },
+    { plant: 'Peach', name: 'Bacterial Spot', desc: 'Water-soaked spots on leaves that turn dark and fall out, leaving a shot-hole appearance. Also affects fruit. Use copper-based bactericides.', tags: ['Bacterial', 'Shot-hole', 'Fruit damage'] },
+  ];
+
+  const grid = document.getElementById('disease-grid');
+  const detail = document.getElementById('disease-detail');
+  const detailTitle = document.getElementById('detail-title');
+  const detailDesc = document.getElementById('detail-desc');
+  const detailTags = document.getElementById('detail-tags');
+  let activeCard = null;
+
+  diseases.forEach((d, i) => {
+    const card = document.createElement('div');
+    card.className = 'disease-card';
+    card.innerHTML = `<div class="disease-plant">${d.plant}</div><div class="disease-name">${d.name}</div>`;
+    card.addEventListener('click', () => {
+      if (activeCard === card) {
+        card.classList.remove('active');
+        detail.classList.remove('show');
+        activeCard = null;
+        return;
+      }
+      document.querySelectorAll('.disease-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      activeCard = card;
+      detailTitle.textContent = `${d.plant} — ${d.name}`;
+      detailDesc.textContent = d.desc;
+      detailTags.innerHTML = d.tags.map(t => `<span class="tag">${t}</span>`).join('');
+      detail.classList.add('show');
+      setTimeout(() => detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+    });
+    grid.appendChild(card);
+  });
+
   const dropZone    = document.getElementById('drop-zone');
   const fileInput   = document.getElementById('file-input');
   const preview     = document.getElementById('preview');
@@ -228,14 +406,10 @@
     analyzeBtn.innerHTML = '<span class="spinner"></span>Analyzing…';
     setStatus('Sending to AI model…', '');
     resultsWrap.classList.remove('show');
-
     try {
       const formData = new FormData();
       formData.append('image', selectedFile);
-      const res = await fetch('/predict', {
-        method: 'POST',
-        body: formData
-      });
+      const res = await fetch('/predict', { method: 'POST', body: formData });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       renderResults(data.predictions);
@@ -269,11 +443,6 @@
     });
     resultsWrap.classList.add('show');
   }
-
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.05 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>

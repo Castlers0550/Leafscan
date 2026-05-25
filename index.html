@@ -1,172 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>LeafScan AI — Plant Disease Detector</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:#0a0f0a;color:#e8f5e9;font-family:'Segoe UI',sans-serif;min-height:100vh;}
-  nav{padding:1.2rem 2rem;display:flex;align-items:center;gap:.6rem;border-bottom:1px solid #1b2e1b;}
-  nav svg{color:#4caf50;}
-  nav span{font-size:1.1rem;font-weight:700;letter-spacing:.5px;}
-  .hero{text-align:center;padding:5rem 1rem 3rem;}
-  .hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.1;}
-  .hero h1 span{color:#4caf50;}
-  .hero p{margin-top:1rem;color:#a5c8a5;font-size:1.1rem;max-width:500px;margin-inline:auto;}
-  .upload-area{max-width:560px;margin:2rem auto;border:2px dashed #2e4d2e;border-radius:16px;padding:3rem 2rem;text-align:center;cursor:pointer;transition:border-color .3s,background .3s;}
-  .upload-area:hover,.upload-area.drag{border-color:#4caf50;background:#0f1f0f;}
-  .upload-area svg{color:#4caf50;margin-bottom:1rem;}
-  .upload-area p{color:#a5c8a5;}
-  .upload-area small{color:#5a7a5a;font-size:.85rem;}
-  #preview{max-width:560px;margin:0 auto 1.5rem;display:none;border-radius:12px;overflow:hidden;}
-  #preview img{width:100%;max-height:300px;object-fit:cover;display:block;}
-  .btn{display:block;margin:0 auto;padding:.9rem 2.5rem;background:#4caf50;color:#fff;border:none;border-radius:50px;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s,transform .1s;}
-  .btn:hover{background:#43a047;}
-  .btn:active{transform:scale(.97);}
-  .btn:disabled{background:#2e4d2e;cursor:not-allowed;}
-  .status{text-align:center;margin:1rem;font-size:.95rem;min-height:1.4rem;}
-  .status.ok{color:#4caf50;}
-  .status.err{color:#ef5350;}
-  .results{max-width:560px;margin:2rem auto;display:none;}
-  .results h2{font-size:1.1rem;color:#a5c8a5;margin-bottom:1rem;}
-  .card{background:#0f1f0f;border:1px solid #1b2e1b;border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:1rem;}
-  .card.top{border-color:#4caf50;}
-  .card-rank{font-size:.8rem;color:#5a7a5a;margin-bottom:.3rem;}
-  .card-plant{font-size:1.1rem;font-weight:700;margin-bottom:.2rem;}
-  .card-status{font-size:.9rem;color:#a5c8a5;margin-bottom:.6rem;}
-  .bar-bg{background:#1b2e1b;border-radius:99px;height:6px;overflow:hidden;}
-  .bar-fill{height:6px;background:#4caf50;border-radius:99px;width:0;transition:width .8s ease;}
-  .pct{font-size:.85rem;color:#4caf50;text-align:right;margin-top:.3rem;}
-  .spinner{display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;margin-right:.5rem;vertical-align:middle;}
-  @keyframes spin{to{transform:rotate(360deg);}}
-  footer{text-align:center;padding:3rem 1rem;color:#3a5a3a;font-size:.85rem;}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #080c08; --bg2: #0e140e; --surface: #1a221a; --surface2: #202a20;
+    --green: #39ff6a; --green-dim: #1a8c3a; --green-glow: rgba(57,255,106,0.15);
+    --green-glow2: rgba(57,255,106,0.06); --text: #e8f0e8; --text2: #8a9e8a;
+    --text3: #4a5e4a; --border: rgba(57,255,106,0.15); --border2: rgba(255,255,255,0.06); --red: #ff4f4f;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 4px; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 3rem; background: rgba(8,12,8,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border2); }
+  .nav-logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--green); display: flex; align-items: center; gap: 8px; text-decoration: none; }
+  .logo-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-size: 0.85rem; color: var(--text2); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--green); }
+  .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 8rem 2rem 5rem; position: relative; overflow: hidden; }
+  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(57,255,106,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(57,255,106,0.04) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%); }
+  .hero-orb { position: absolute; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(57,255,106,0.07) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); animation: orb 5s ease-in-out infinite; }
+  @keyframes orb { 0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.6} 50%{transform:translate(-50%,-50%) scale(1.15);opacity:1} }
+  .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--green-glow2); border: 1px solid var(--border); border-radius: 99px; padding: 6px 16px; font-size: 0.72rem; color: var(--green); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2rem; position: relative; animation: fadeup 0.8s ease both; }
+  .badge-dot { width: 5px; height: 5px; background: var(--green); border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
+  .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 700; line-height: 1.05; letter-spacing: -2px; margin-bottom: 1.5rem; position: relative; animation: fadeup 0.8s 0.1s ease both; }
+  .hero h1 span { color: var(--green); }
+  .hero > p { font-size: 1.05rem; color: var(--text2); max-width: 500px; line-height: 1.8; margin-bottom: 2.5rem; position: relative; animation: fadeup 0.8s 0.2s ease both; }
+  .hero-btns { display: flex; gap: 1rem; justify-content: center; animation: fadeup 0.8s 0.3s ease both; position: relative; }
+  @keyframes fadeup { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  .btn { font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 500; padding: 0.75rem 1.75rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; border: none; }
+  .btn-green { background: var(--green); color: #080c08; }
+  .btn-green:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border2); }
+  .btn-outline:hover { border-color: var(--border); color: var(--green); transform: translateY(-2px); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; filter: none !important; }
+  .stats { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; padding: 2rem; border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); background: var(--bg2); }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--green); }
+  .stat-label { font-size: 0.75rem; color: var(--text3); margin-top: 2px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .section { padding: 6rem 2rem; max-width: 1000px; margin: 0 auto; }
+  .section-label { font-size: 0.72rem; color: var(--green); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+  .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; letter-spacing: -1px; margin-bottom: 1rem; }
+  .section-sub { font-size: 0.95rem; color: var(--text2); line-height: 1.7; max-width: 480px; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+  .step-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; padding: 1.75rem; transition: border-color 0.3s, transform 0.3s; }
+  .step-card:hover { border-color: var(--border); transform: translateY(-4px); }
+  .step-num { width: 36px; height: 36px; border-radius: 8px; background: var(--green-glow); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--green); margin-bottom: 1rem; }
+  .step-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .step-card p { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
+  #detector { background: var(--bg2); border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); }
+  #detector .section { max-width: 760px; }
+  .drop-zone { border: 1.5px dashed var(--border); border-radius: 16px; padding: 3.5rem 2rem; text-align: center; cursor: pointer; transition: all 0.2s; margin-top: 2.5rem; background: var(--surface); position: relative; overflow: hidden; }
+  .drop-zone:hover, .drop-zone.hovering { border-color: var(--green); background: var(--surface2); }
+  .drop-zone.has-image { padding: 1rem; border-style: solid; }
+  .drop-zone input { display: none; }
+  .drop-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+  .drop-title { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .drop-sub { font-size: 0.8rem; color: var(--text3); }
+  .drop-sub span { color: var(--green); }
+  #preview { max-width: 100%; max-height: 360px; border-radius: 12px; display: none; margin: 0 auto; object-fit: contain; }
+  #preview.show { display: block; }
+  .action-row { display: flex; gap: 0.75rem; justify-content: center; margin-top: 1.25rem; }
+  #status-msg { text-align: center; font-size: 0.82rem; color: var(--text3); margin-top: 0.75rem; min-height: 1rem; }
+  #status-msg.err { color: var(--red); }
+  #status-msg.ok { color: var(--green); }
+  #results-wrap { display: none; margin-top: 2rem; }
+  #results-wrap.show { display: block; }
+  .results-title { font-size: 0.72rem; color: var(--text2); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .pred-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 1rem 1.25rem; display: grid; grid-template-columns: 36px 1fr auto; gap: 0.6rem 1rem; align-items: center; margin-bottom: 0.75rem; animation: fadeup 0.4s ease both; transition: border-color 0.2s; }
+  .pred-card.top { border-color: var(--border); background: var(--surface2); }
+  .pred-rank { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 700; background: var(--surface2); color: var(--text3); border: 1px solid var(--border2); }
+  .top .pred-rank { background: var(--green-glow); color: var(--green); border-color: var(--border); }
+  .pred-plant { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
+  .pred-name { font-size: 0.95rem; font-weight: 500; }
+  .healthy-badge { display: inline-block; background: var(--green-glow); color: var(--green); font-size: 0.65rem; font-weight: 600; padding: 2px 8px; border-radius: 99px; margin-left: 8px; vertical-align: 2px; border: 1px solid var(--border); }
+  .pred-pct { font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--green); }
+  .pred-bar-row { grid-column: 1 / -1; margin-top: -4px; }
+  .pred-bar-bg { background: var(--surface2); border-radius: 99px; height: 4px; overflow: hidden; }
+  .pred-bar-fill { height: 100%; background: var(--green); border-radius: 99px; width: 0%; transition: width 0.7s cubic-bezier(0.25,1,0.5,1); }
+  .spinner { display: inline-block; width: 13px; height: 13px; border: 2px solid rgba(8,12,8,0.3); border-top-color: #080c08; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: -2px; margin-right: 6px; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 3rem; }
+  .feat-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 14px; padding: 1.5rem; transition: border-color 0.3s, transform 0.3s; }
+  .feat-card:hover { border-color: var(--border); transform: translateY(-3px); }
+  .feat-icon { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; }
+  .feat-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .feat-card p { font-size: 0.82rem; color: var(--text2); line-height: 1.6; }
+  footer { text-align: center; padding: 2.5rem; border-top: 1px solid var(--border2); font-size: 0.8rem; color: var(--text3); }
+  footer span { color: var(--green); }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
-
 <nav>
-  <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v6l4 2"/></svg>
-  <span>🌿 LeafScan</span>
+  <a class="nav-logo" href="#"><div class="logo-dot"></div> LeafScan AI</a>
+  <span style="font-size:0.78rem; color:var(--text3);">by <span style="color:var(--green);">Eben Siyabalapitiya</span></span>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#detector">Try it</a></li>
+    <li><a href="#features">Features</a></li>
+  </ul>
 </nav>
-
-<div class="hero">
-  <h1>Detect Plant Diseases<br><span>Instantly with AI</span></h1>
-  <p>Upload a leaf photo and get an instant diagnosis powered by a model trained on 70,000+ images.</p>
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb"></div>
+  <div class="hero-badge"><div class="badge-dot"></div> AI-Powered Plant Health</div>
+  <h1>Detect Plant<br/><span>Diseases Instantly</span></h1>
+  <p>Upload a photo of any plant leaf and our AI identifies diseases, infections, and deficiencies in seconds.</p>
+  <div class="hero-btns">
+    <a href="#detector" class="btn btn-green">Try it free ↓</a>
+    <a href="#how" class="btn btn-outline">How it works</a>
+  </div>
+</section>
+<div class="stats reveal">
+  <div class="stat"><div class="stat-num">70K+</div><div class="stat-label">Training Images</div></div>
+  <div class="stat"><div class="stat-num">38</div><div class="stat-label">Disease Classes</div></div>
+  <div class="stat"><div class="stat-num">14</div><div class="stat-label">Plant Types</div></div>
+  <div class="stat"><div class="stat-num">99.9%</div><div class="stat-label">Accuracy</div></div>
 </div>
-
-<div class="upload-area" id="dropZone">
-  <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-  <p>Drag & drop a leaf photo here</p>
-  <small>or click to browse — JPG, PNG, WEBP</small>
-  <input type="file" id="fileInput" accept="image/*" style="display:none"/>
-</div>
-
-<div id="preview"><img id="previewImg" src="" alt="preview"/></div>
-
-<button class="btn" id="analyzeBtn" disabled onclick="analyze()">Analyze leaf</button>
-<div class="status" id="status"></div>
-
-<div class="results" id="resultsWrap">
-  <h2>Top predictions</h2>
-  <div id="predList"></div>
-</div>
-
-<footer>LeafScan AI &mdash; by Eben Siyabalapitiya</footer>
-
+<section id="how" class="section">
+  <div class="reveal">
+    <div class="section-label">Process</div>
+    <div class="section-title">How it works</div>
+    <p class="section-sub">Three simple steps to identify what's wrong with your plant.</p>
+  </div>
+  <div class="steps">
+    <div class="step-card reveal"><div class="step-num">01</div><h3>Upload a photo</h3><p>Take a clear photo of the affected leaf and drag it into the detector below.</p></div>
+    <div class="step-card reveal"><div class="step-num">02</div><h3>AI analyzes it</h3><p>Our EfficientNetB0 model scans the leaf against 70,000+ disease patterns instantly.</p></div>
+    <div class="step-card reveal"><div class="step-num">03</div><h3>Get results</h3><p>Receive the top 3 most likely diagnoses with confidence scores in under a second.</p></div>
+  </div>
+</section>
+<section id="detector">
+  <div class="section">
+    <div class="reveal">
+      <div class="section-label">Tool</div>
+      <div class="section-title">Analyze your leaf</div>
+      <p class="section-sub">Drag and drop a photo or click to browse. Works best with clear, well-lit leaf photos.</p>
+    </div>
+    <div class="drop-zone reveal" id="drop-zone" onclick="document.getElementById('file-input').click()">
+      <input type="file" id="file-input" accept="image/*" />
+      <div id="upload-hint">
+        <span class="drop-icon">🌿</span>
+        <p class="drop-title">Drop your leaf photo here</p>
+        <p class="drop-sub">or <span>click to browse</span> — JPG, PNG, WEBP</p>
+      </div>
+      <img id="preview" src="" alt="Preview" />
+    </div>
+    <div class="action-row">
+      <button id="analyze-btn" class="btn btn-green" disabled onclick="analyze()">Analyze leaf</button>
+      <button class="btn btn-outline" onclick="resetAll()">Reset</button>
+    </div>
+    <p id="status-msg">Select a leaf image to get started</p>
+    <div id="results-wrap">
+      <p class="results-title">Top predictions</p>
+      <div id="pred-list"></div>
+    </div>
+  </div>
+</section>
+<section id="features" class="section">
+  <div class="reveal">
+    <div class="section-label">Why LeafScan</div>
+    <div class="section-title">Built for accuracy</div>
+    <p class="section-sub">Everything you need to keep your plants healthy.</p>
+  </div>
+  <div class="features">
+    <div class="feat-card reveal"><span class="feat-icon">⚡</span><h3>Instant results</h3><p>Get a diagnosis in under a second using our optimized EfficientNetB0 model.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🎯</span><h3>99.9% accuracy</h3><p>Trained on 70,000+ verified plant disease images.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🌱</span><h3>38 disease classes</h3><p>Covers tomatoes, apples, corn, grapes, potatoes and more.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🔒</span><h3>Private & secure</h3><p>Your photos are never stored. Everything is processed in real time.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">📱</span><h3>Works on any device</h3><p>Fully responsive — use it on your phone in the field or on desktop.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🆓</span><h3>Completely free</h3><p>No account needed. No limits. Just upload and get your answer.</p></div>
+  </div>
+</section>
+<footer>Built with <span>TensorFlow</span> & EfficientNetB0 — LeafScan AI © 2026 — by <span>Eben Siyabalapitiya</span></footer>
 <script>
-const HF_API = 'https://castlers0550-leafscan.hf.space';
-const dropZone = document.getElementById('dropZone');
-const fileInput = document.getElementById('fileInput');
-const analyzeBtn = document.getElementById('analyzeBtn');
-const statusEl = document.getElementById('status');
-const resultsWrap = document.getElementById('resultsWrap');
-const predList = document.getElementById('predList');
-const preview = document.getElementById('preview');
-const previewImg = document.getElementById('previewImg');
-let selectedFile = null;
+  const dropZone    = document.getElementById('drop-zone');
+  const fileInput   = document.getElementById('file-input');
+  const preview     = document.getElementById('preview');
+  const uploadHint  = document.getElementById('upload-hint');
+  const analyzeBtn  = document.getElementById('analyze-btn');
+  const statusMsg   = document.getElementById('status-msg');
+  const resultsWrap = document.getElementById('results-wrap');
+  const predList    = document.getElementById('pred-list');
+  let selectedFile  = null;
 
-dropZone.addEventListener('click', () => fileInput.click());
-dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
-dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag'); handleFile(e.dataTransfer.files[0]); });
-fileInput.addEventListener('change', () => handleFile(fileInput.files[0]));
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('hovering'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('hovering'));
+  dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('hovering'); if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]); });
+  fileInput.addEventListener('change', () => { if (fileInput.files[0]) loadFile(fileInput.files[0]); });
 
-function handleFile(file) {
-  if (!file) return;
-  selectedFile = file;
-  const url = URL.createObjectURL(file);
-  previewImg.src = url;
-  preview.style.display = 'block';
-  analyzeBtn.disabled = false;
-  resultsWrap.style.display = 'none';
-  statusEl.textContent = '';
-  statusEl.className = 'status';
-}
-
-function setStatus(msg, type) {
-  statusEl.textContent = msg;
-  statusEl.className = 'status' + (type ? ' ' + type : '');
-}
-
-async function analyze() {
-  if (!selectedFile) return;
-  analyzeBtn.disabled = true;
-  analyzeBtn.innerHTML = '<span class="spinner"></span>Analyzing…';
-  setStatus('Sending to AI model…', '');
-  resultsWrap.style.display = 'none';
-
-  try {
-    const base64 = await new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.readAsDataURL(selectedFile);
-    });
-
-    const res = await fetch(`${HF_API}/api/predict`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: base64 })
-    });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    renderResults(data.result);
-    setStatus('Analysis complete!', 'ok');
-  } catch(e) {
-    setStatus('Error: ' + e.message, 'err');
-  } finally {
+  function loadFile(file) {
+    selectedFile = file;
+    preview.src = URL.createObjectURL(file);
+    preview.classList.add('show');
+    uploadHint.style.display = 'none';
+    dropZone.classList.add('has-image');
     analyzeBtn.disabled = false;
-    analyzeBtn.innerHTML = 'Analyze leaf';
+    resultsWrap.classList.remove('show');
+    setStatus('Ready — click Analyze leaf', '');
   }
-}
 
-function renderResults(text) {
-  predList.innerHTML = '';
-  const blocks = text.trim().split('\n\n').filter(b => b.trim());
-  blocks.forEach((block, i) => {
-    const lines = block.split('\n');
-    const title = lines[0].replace(/#\d+ /, '');
-    const status = lines[1] || '';
-    const confLine = lines[2] || '';
-    const pct = confLine.replace('Confidence: ', '').replace('%', '').trim();
-    const healthy = status.toLowerCase().includes('healthy');
+  function resetAll() {
+    selectedFile = null;
+    preview.src = ''; preview.classList.remove('show');
+    uploadHint.style.display = '';
+    dropZone.classList.remove('has-image', 'hovering');
+    analyzeBtn.disabled = true; analyzeBtn.innerHTML = 'Analyze leaf';
+    resultsWrap.classList.remove('show');
+    fileInput.value = '';
+    setStatus('Select a leaf image to get started', '');
+  }
 
-    const card = document.createElement('div');
-    card.className = 'card' + (i === 0 ? ' top' : '');
-    card.innerHTML = `
-      <div class="card-rank">Prediction #${i+1}</div>
-      <div class="card-plant">${title}</div>
-      <div class="card-status">${healthy ? '✅' : '⚠️'} ${status}</div>
-      <div class="bar-bg"><div class="bar-fill" id="bar${i}"></div></div>
-      <div class="pct">${pct}%</div>`;
-    predList.appendChild(card);
-    setTimeout(() => {
-      const bar = document.getElementById('bar' + i);
-      if (bar) bar.style.width = pct + '%';
-    }, 100 + i * 100);
-  });
-  resultsWrap.style.display = 'block';
-}
+  function setStatus(msg, cls) { statusMsg.textContent = msg; statusMsg.className = cls; }
+
+  async function analyze() {
+    if (!selectedFile) return;
+    analyzeBtn.disabled = true;
+    analyzeBtn.innerHTML = '<span class="spinner"></span>Analyzing…';
+    setStatus('Sending to AI model…', '');
+    resultsWrap.classList.remove('show');
+
+    try {
+      const formData = new FormData();
+      formData.append('image', selectedFile);
+      const res = await fetch('/predict', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      renderResults(data.predictions);
+      setStatus('Analysis complete!', 'ok');
+    } catch(e) {
+      setStatus('Error: ' + e.message, 'err');
+    } finally {
+      analyzeBtn.disabled = false;
+      analyzeBtn.innerHTML = 'Analyze leaf';
+    }
+  }
+
+  function renderResults(preds) {
+    predList.innerHTML = '';
+    if (!preds || preds.length === 0) { setStatus('No results returned', 'err'); return; }
+    preds.forEach((p, i) => {
+      const pct = (p.confidence * 100).toFixed(1);
+      const card = document.createElement('div');
+      card.className = 'pred-card' + (i === 0 ? ' top' : '');
+      card.style.animationDelay = (i * 0.1) + 's';
+      card.innerHTML = `
+        <div class="pred-rank">${i + 1}</div>
+        <div>
+          <div class="pred-plant">${p.plant}</div>
+          <div class="pred-name">${p.disease}${p.healthy ? '<span class="healthy-badge">Healthy</span>' : ''}</div>
+        </div>
+        <div class="pred-pct">${pct}%</div>
+        <div class="pred-bar-row"><div class="pred-bar-bg"><div class="pred-bar-fill" id="bar${i}"></div></div></div>`;
+      predList.appendChild(card);
+      setTimeout(() => { document.getElementById('bar' + i).style.width = pct + '%'; }, 100 + i * 80);
+    });
+    resultsWrap.classList.add('show');
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>

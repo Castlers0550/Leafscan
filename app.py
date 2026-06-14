@@ -6,13 +6,11 @@ from flask import Flask, request, jsonify, send_from_directory
 from PIL import Image
 import tensorflow as tf
 
-# ── paths ──────────────────────────────────────────────────────────────────
 MODEL_PATH  = "saved_model/plant_disease_model.h5"
 LABELS_PATH = "saved_model/class_names.txt"
 IMG_SIZE    = 224
 TOP_K       = 3
 
-# ── download model if missing ───────────────────────────────────────────────
 if not os.path.exists(MODEL_PATH):
     print("📥 Downloading model from Google Drive...")
     os.makedirs("saved_model", exist_ok=True)
@@ -20,21 +18,18 @@ if not os.path.exists(MODEL_PATH):
     urllib.request.urlretrieve(url, MODEL_PATH)
     print("✅ Model downloaded!")
 
-# ── download class names if missing ────────────────────────────────────────
 if not os.path.exists(LABELS_PATH):
     print("📥 Downloading class names...")
     url = "https://drive.google.com/uc?export=download&id=109P3HC2aWgfp6Pvg_YtkRNF530pSpXYs"
     urllib.request.urlretrieve(url, LABELS_PATH)
     print("✅ Class names downloaded!")
 
-# ── load model ──────────────────────────────────────────────────────────────
 print("🌿 Loading model...")
 model = tf.keras.models.load_model(MODEL_PATH)
 with open(LABELS_PATH) as f:
     CLASS_NAMES = [line.strip() for line in f.readlines()]
 print(f"✅ Model ready — {len(CLASS_NAMES)} classes")
 
-# ── flask app ───────────────────────────────────────────────────────────────
 app = Flask(__name__, static_folder=".")
 
 def prettify_label(raw):

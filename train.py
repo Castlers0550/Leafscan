@@ -1,12 +1,11 @@
 """
-Plant Disease Detection - Training Script
-==========================================
+Plant Disease Detection - Training Script (Fixed)
+=================================================
 RUN:
   py -3.11 train.py
 """
 
 import os
-import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
@@ -20,7 +19,7 @@ TRAIN_DIR   = "New Plant Diseases Dataset(Augmented)/New Plant Diseases Dataset(
 
 
 def load_dataset():
-    print("📦 Loading dataset from local folder...")
+    print("📦 Loading dataset...")
 
     train_ds = tf.keras.utils.image_dataset_from_directory(
         TRAIN_DIR,
@@ -44,35 +43,16 @@ def load_dataset():
     class_names = train_ds.class_names
     num_classes = len(class_names)
     print(f"✅ {num_classes} classes found!")
-    print(f"   Sample classes: {class_names[:5]}...")
 
-    normalization_layer = tf.keras.layers.Rescaling(1./255)
-
-    augment = tf.keras.Sequential([
-        tf.keras.layers.RandomFlip("horizontal_and_vertical"),
-        tf.keras.layers.RandomRotation(0.2),
-        tf.keras.layers.RandomZoom(0.2),
-        tf.keras.layers.RandomBrightness(0.2),
-        tf.keras.layers.RandomContrast(0.2),
-    ])
-
-    train_ds = (
-        train_ds
-        .map(lambda x, y: (normalization_layer(x), y), num_parallel_calls=tf.data.AUTOTUNE)
-        .map(lambda x, y: (augment(x, training=True), y), num_parallel_calls=tf.data.AUTOTUNE)
-        .prefetch(tf.data.AUTOTUNE)
-    )
-    val_ds = (
-        val_ds
-        .map(lambda x, y: (normalization_layer(x), y), num_parallel_calls=tf.data.AUTOTUNE)
-        .prefetch(tf.data.AUTOTUNE)
-    )
+    # EfficientNet expects pixels in 0-255, just prefetch
+    train_ds = train_ds.prefetch(tf.data.AUTOTUNE)
+    val_ds   = val_ds.prefetch(tf.data.AUTOTUNE)
 
     return train_ds, val_ds, num_classes, class_names
 
 
 def build_model(num_classes):
-    print("🏗️  Building EfficientNetB0 model...")
+    print("🏗️  Building model...")
 
     base = tf.keras.applications.EfficientNetB0(
         input_shape=(IMG_SIZE, IMG_SIZE, 3),
@@ -85,8 +65,6 @@ def build_model(num_classes):
     x = base(inputs, training=False)
     x = tf.keras.layers.GlobalAveragePooling2D()(x)
     x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.Dense(512, activation="relu")(x)
-    x = tf.keras.layers.Dropout(0.4)(x)
     x = tf.keras.layers.Dense(256, activation="relu")(x)
     x = tf.keras.layers.Dropout(0.3)(x)
     outputs = tf.keras.layers.Dense(num_classes, activation="softmax")(x)
@@ -113,15 +91,15 @@ def main():
         tf.keras.callbacks.ModelCheckpoint(MODEL_PATH, monitor="val_accuracy", save_best_only=True, verbose=1),
     ]
 
-    # Phase 1 — train top layers only
+    # Phase 1
     print("\n🚀 Phase 1: Training top layers...")
     history1 = model.fit(train_ds, validation_data=val_ds, epochs=EPOCHS, callbacks=cb)
 
-    # Phase 2 — unfreeze and fine-tune
-    print("\n🔧 Phase 2: Fine-tuning entire model...")
+    # Phase 2
+    print("\n🔧 Phase 2: Fine-tuning...")
     base.trainable = True
     model.compile(
-        optimizer=tf.keras.optimizers.Adam(3e-4),
+        optimizer=tf.keras.optimizers.Adam(1e-4),
         loss="sparse_categorical_crossentropy",
         metrics=["accuracy"],
     )
@@ -132,23 +110,11 @@ def main():
         callbacks=cb,
     )
 
-    # Save class names
     with open(LABELS_PATH, "w") as f:
         f.write("\n".join(class_names))
 
     print(f"\n✅ Model saved  → {MODEL_PATH}")
     print(f"✅ Labels saved → {LABELS_PATH}")
-
-    # Plot accuracy
-    acc = history1.history["val_accuracy"] + history2.history["val_accuracy"]
-    plt.figure(figsize=(8, 4))
-    plt.plot(acc, marker='o')
-    plt.title("Validation Accuracy per Epoch")
-    plt.xlabel("Epoch"); plt.ylabel("Accuracy")
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig(os.path.join(SAVE_DIR, "training_history.png"))
-    print("📊 Plot saved")
 
     loss, acc = model.evaluate(val_ds, verbose=0)
     print(f"\n🎯 Final validation accuracy: {acc*100:.1f}%")

@@ -11,6 +11,7 @@ I built this project to learn more about computer vision, model deployment, and 
 - 99.9% Validation Accuracy
 - 70,000+ Training Images
 - 38 Disease Classes
+- 14 Plant Types
 
 
 ##  What I Used

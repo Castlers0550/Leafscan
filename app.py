@@ -12,23 +12,23 @@ IMG_SIZE    = 224
 TOP_K       = 3
 
 if not os.path.exists(MODEL_PATH):
-    print("📥 Downloading model from Google Drive...")
+    print(" Downloading model from Google Drive...")
     os.makedirs("saved_model", exist_ok=True)
     url = "https://drive.google.com/uc?export=download&id=1tDfqodbnfOPhX0qoiXhgEozmY9MdZzXu&confirm=t"
     urllib.request.urlretrieve(url, MODEL_PATH)
-    print("✅ Model downloaded!")
+    print("Model downloaded!")
 
 if not os.path.exists(LABELS_PATH):
     print("📥 Downloading class names...")
     url = "https://drive.google.com/uc?export=download&id=109P3HC2aWgfp6Pvg_YtkRNF530pSpXYs"
     urllib.request.urlretrieve(url, LABELS_PATH)
-    print("✅ Class names downloaded!")
+    print("Class names downloaded!")
 
 print("🌿 Loading model...")
 model = tf.keras.models.load_model(MODEL_PATH)
 with open(LABELS_PATH) as f:
     CLASS_NAMES = [line.strip() for line in f.readlines()]
-print(f"✅ Model ready — {len(CLASS_NAMES)} classes")
+print(f"Model ready — {len(CLASS_NAMES)} classes")
 
 app = Flask(__name__, static_folder=".")
 

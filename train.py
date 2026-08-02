@@ -1,6 +1,5 @@
 """
 Plant Disease Detection - Training Script (Fixed)
-=================================================
 RUN:
   py -3.11 train.py
 """
@@ -42,7 +41,7 @@ def load_dataset():
 
     class_names = train_ds.class_names
     num_classes = len(class_names)
-    print(f"✅ {num_classes} classes found!")
+    print(f" {num_classes} classes found!")
 
     # EfficientNet expects pixels in 0-255, just prefetch
     train_ds = train_ds.prefetch(tf.data.AUTOTUNE)
@@ -75,7 +74,7 @@ def build_model(num_classes):
         loss="sparse_categorical_crossentropy",
         metrics=["accuracy"],
     )
-    print(f"✅ Model built — {num_classes} output classes")
+    print(f" Model built — {num_classes} output classes")
     return model, base
 
 
@@ -113,8 +112,8 @@ def main():
     with open(LABELS_PATH, "w") as f:
         f.write("\n".join(class_names))
 
-    print(f"\n✅ Model saved  → {MODEL_PATH}")
-    print(f"✅ Labels saved → {LABELS_PATH}")
+    print(f"\n Model saved  → {MODEL_PATH}")
+    print(f" Labels saved → {LABELS_PATH}")
 
     loss, acc = model.evaluate(val_ds, verbose=0)
     print(f"\n🎯 Final validation accuracy: {acc*100:.1f}%")
